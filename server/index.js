@@ -51,7 +51,8 @@ app.get('/api/products/:productId', (req, res, next) => {
     .then(result => {
       const product = result.rows[0];
       if (!product) {
-        next();
+        const productError = new ClientError('Unable to find product with supplied ID', 400);
+        return next(productError);
       } else {
         res.status(200).json(result.rows[0]);
       }
