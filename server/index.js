@@ -22,23 +22,25 @@ app.get('/api/health-check', (req, res, next) => {
 app.get('/api/products', (req, res, next) => {
   const sql = `
     select
-      "name",
       "productId",
+      "name",
       "price",
       "image",
       "shortDescription"
-    from "products"
+      from "products"
   `;
   db.query(sql)
-    .then(result => res.json(result.rows))
+    .then(result => {
+      res.json(result.rows);
+    })
     .catch(err => next(err));
 });
 
 app.get('/api/products/:productId', (req, res, next) => {
-  const productId = parseInt(req.params.productId, 10);
+  const productId = parseFloat(req.params.productId, 10);
   if (!Number.isInteger(productId) || productId <= 0) {
     return res.status(400).json({
-      error: 'productId munst be a positive integer'
+      error: 'productId must be a positive integer'
     });
   }
   const sql = `
@@ -51,13 +53,127 @@ app.get('/api/products/:productId', (req, res, next) => {
     .then(result => {
       const product = result.rows[0];
       if (!product) {
-        const productError = new ClientError('Unable to find product with supplied ID', 400);
-        return next(productError);
+        res.status(404).json({
+          error: `Cannot find product with productId ${productId}`
+        });
       } else {
-        res.status(200).json(result.rows[0]);
+        res.json(product);
       }
     })
-    .catch(err => { next(err); });
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
+});
+
+app.get('/api/cart', (req, res, next) => {
+  if (!('cartId' in req.session) || req.session.cartId === '') {
+    res.json([]);
+  }
+  const sql = `
+    select "c"."cartItemId",
+      "c"."price",
+      "p"."productId",
+      "p"."image",
+      "p"."name",
+      "p"."shortDescription"
+      from "cartItems" as "c"
+      join "products" as "p" using ("productId")
+      where "c"."cartId" = $1
+  `;
+  const params = [req.session.cartId];
+  db.query(sql, params)
+    .then(result => {
+      res.json(result.rows);
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/cart', (req, res, next) => {
+  if (Object.keys(req.body).length === 0) {
+    res.status(400).json({
+      error: 'content is a required field'
+    });
+  } else if (!Number.isInteger(parseFloat(req.body.productId)) || parseFloat(req.body.productId) <= 0) {
+    res.status(400).json({
+      error: 'productId must be a positive integer'
+    });
+  } else if (!('productId' in req.body) || req.body.productId === '') {
+    res.status(400).json({
+      error: 'productId=integer required'
+    });
+  }
+  const sql = `
+    select "price"
+      from "products"
+      where "productId" = $1
+  `;
+  const params = [req.body.productId];
+  db.query(sql, params)
+    .then(result => {
+      if (!result.rows[0]) {
+        res.status(400).json({
+          error: `Cannot find price associated with with productId ${req.body.productId}`
+        });
+      }
+      if ('cartId' in req.session) {
+        const cartIdPrice = [{
+          cartId: req.session.cartId,
+          price: result.rows[0].price
+        }];
+        return cartIdPrice;
+      }
+      const sql = `
+        insert into "carts" ("cartId", "createdAt")
+          values (default, default)
+          returning "cartId"
+      `;
+      const promise = (db.query(sql)
+        .then(data => {
+          const cartIdPrice = {
+            cartId: data.rows[0].cartId,
+            price: result.rows[0].price
+          };
+          return cartIdPrice;
+        }));
+      return Promise.all([promise]);
+    })
+    .then(data => {
+      req.session.cartId = data[0].cartId;
+      const sql = `
+        insert into "cartItems" ("cartId", "productId", "price")
+          values ($1, $2, $3)
+          returning "cartItemId"
+      `;
+      const params = [data[0].cartId, req.body.productId, data[0].price];
+      return db.query(sql, params);
+    })
+    .then(result => {
+      const sql = `
+        select "c"."cartItemId",
+          "c"."price",
+          "p"."productId",
+          "p"."image",
+          "p"."name",
+          "p"."shortDescription"
+          from "cartItems" as "c"
+          join "products" as "p" using ("productId")
+          where "c"."cartItemId" = $1
+        `;
+      const params = [result.rows[0].cartItemId];
+      db.query(sql, params)
+        .then(result => {
+          res.status(201).json(result.rows[0]);
+        });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({
+        error: 'An unexpected error occurred.'
+      });
+    });
 });
 
 app.use('/api', (req, res, next) => {
@@ -70,7 +186,7 @@ app.use((err, req, res, next) => {
   } else {
     console.error(err);
     res.status(500).json({
-      error: 'An unexpected error occurred'
+      error: 'an unexpected error occurred'
     });
   }
 });
