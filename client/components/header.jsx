@@ -8,7 +8,7 @@ function Header(props) {
         <img src="images/doller.png" width="30" height="30" className="d-inline-block align-top mr-1" />
           Wicked Sales
       </div>
-      <div className="text-white mr-5">
+      <div onClick={() => props.setView('cart', {})} className="text-white mr-5 cart-div">
         <span className="mr-2">{`${props.cartItemCount} ${cartText}`}</span>
         <i className="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
       </div>

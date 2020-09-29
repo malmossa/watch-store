@@ -3,10 +3,17 @@
 }
 
 .product-card {
-  margin-bottom: 54px;
   cursor: pointer;
 }
 
+.product {
+  margin-bottom: 54px;
+}
+
 .back-to-catalog {
+  cursor: pointer;
+}
+
+.cart-div {
   cursor: pointer;
 }
