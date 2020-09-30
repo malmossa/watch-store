@@ -175,6 +175,29 @@ app.post('/api/cart', (req, res, next) => {
     });
 });
 
+app.post('/api/orders', (req, res, next) => {
+  if (!('cartId' in req.session)) {
+    res.status(400).json({
+      error: 'no stored cartId in session'
+    });
+  } else if (!('name' in req.body) || !('creditCard' in req.body) || !('shippingAddress' in req.body)) {
+    res.status(400).json({
+      error: 'name, creditCard, and shippingAddress are required in the request body'
+    });
+  }
+  const sql = `
+    insert into "orders" ("cartId", "name", "creditCard", "shippingAddress")
+      values ($1, $2, $3, $4)
+      returning "orderId", "createdAt", "name", "creditCard", "shippingAddress";
+  `;
+  const params = [req.session.cartId, req.body.name, req.body.creditCard, req.body.shippingAddress];
+  db.query(sql, params)
+    .then(result => {
+      delete req.session.cartId;
+      res.status(201).json(result.rows[0]);
+    });
+});
+
 app.use('/api', (req, res, next) => {
   next(new ClientError(`cannot ${req.method} ${req.originalUrl}`, 404));
 });

@@ -17,13 +17,17 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 ALTER TABLE IF EXISTS ONLY public.products DROP CONSTRAINT IF EXISTS products_pkey;
+ALTER TABLE IF EXISTS ONLY public.orders DROP CONSTRAINT IF EXISTS orders_pkey;
 ALTER TABLE IF EXISTS ONLY public.carts DROP CONSTRAINT IF EXISTS carts_pkey;
 ALTER TABLE IF EXISTS ONLY public."cartItems" DROP CONSTRAINT IF EXISTS "cartItems_pkey";
 ALTER TABLE IF EXISTS public.products ALTER COLUMN "productId" DROP DEFAULT;
+ALTER TABLE IF EXISTS public.orders ALTER COLUMN "orderId" DROP DEFAULT;
 ALTER TABLE IF EXISTS public.carts ALTER COLUMN "cartId" DROP DEFAULT;
 ALTER TABLE IF EXISTS public."cartItems" ALTER COLUMN "cartItemId" DROP DEFAULT;
 DROP SEQUENCE IF EXISTS public."products_productId_seq";
 DROP TABLE IF EXISTS public.products;
+DROP SEQUENCE IF EXISTS public."orders_orderId_seq";
+DROP TABLE IF EXISTS public.orders;
 DROP SEQUENCE IF EXISTS public."carts_cartId_seq";
 DROP TABLE IF EXISTS public.carts;
 DROP SEQUENCE IF EXISTS public."cartItems_cartItemId_seq";
@@ -125,6 +129,40 @@ ALTER SEQUENCE public."carts_cartId_seq" OWNED BY public.carts."cartId";
 
 
 --
+-- Name: orders; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.orders (
+    "orderId" integer NOT NULL,
+    "cartId" integer NOT NULL,
+    name text NOT NULL,
+    "creditCard" text NOT NULL,
+    "shippingAddress" text NOT NULL,
+    "createdAt" timestamp(6) with time zone DEFAULT now() NOT NULL
+);
+
+
+--
+-- Name: orders_orderId_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public."orders_orderId_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: orders_orderId_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public."orders_orderId_seq" OWNED BY public.orders."orderId";
+
+
+--
 -- Name: products; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -173,6 +211,13 @@ ALTER TABLE ONLY public.carts ALTER COLUMN "cartId" SET DEFAULT nextval('public.
 
 
 --
+-- Name: orders orderId; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders ALTER COLUMN "orderId" SET DEFAULT nextval('public."orders_orderId_seq"'::regclass);
+
+
+--
 -- Name: products productId; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -184,6 +229,22 @@ ALTER TABLE ONLY public.products ALTER COLUMN "productId" SET DEFAULT nextval('p
 --
 
 COPY public."cartItems" ("cartItemId", "cartId", "productId", price) FROM stdin;
+440	67	1	2999
+445	70	1	2999
+451	73	1	2999
+458	74	6	830
+442	68	1	2999
+447	71	1	2999
+453	74	1	2999
+454	74	1	2999
+455	74	1	2999
+456	74	2	2595
+459	74	5	9900
+460	74	4	999
+438	66	2	2595
+444	69	1	2999
+449	72	1	2999
+457	74	3	2900
 \.
 
 
@@ -192,6 +253,23 @@ COPY public."cartItems" ("cartItemId", "cartId", "productId", price) FROM stdin;
 --
 
 COPY public.carts ("cartId", "createdAt") FROM stdin;
+66	2020-09-17 18:14:39.98256-04
+67	2020-09-17 18:15:12.917451-04
+68	2020-09-17 18:20:08.413413-04
+69	2020-09-17 18:26:07.11869-04
+70	2020-09-17 18:27:23.658448-04
+71	2020-09-17 18:32:34.832583-04
+72	2020-09-17 18:42:14.789125-04
+73	2020-09-17 18:47:04.660185-04
+74	2020-09-17 18:49:11.706558-04
+\.
+
+
+--
+-- Data for Name: orders; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+COPY public.orders ("orderId", "cartId", name, "creditCard", "shippingAddress", "createdAt") FROM stdin;
 \.
 
 
@@ -213,14 +291,21 @@ COPY public.products ("productId", name, price, image, "shortDescription", "long
 -- Name: cartItems_cartItemId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."cartItems_cartItemId_seq"', 1, false);
+SELECT pg_catalog.setval('public."cartItems_cartItemId_seq"', 460, true);
 
 
 --
 -- Name: carts_cartId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
 --
 
-SELECT pg_catalog.setval('public."carts_cartId_seq"', 1, false);
+SELECT pg_catalog.setval('public."carts_cartId_seq"', 74, true);
+
+
+--
+-- Name: orders_orderId_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public."orders_orderId_seq"', 1, false);
 
 
 --
@@ -247,6 +332,14 @@ ALTER TABLE ONLY public.carts
 
 
 --
+-- Name: orders orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.orders
+    ADD CONSTRAINT orders_pkey PRIMARY KEY ("orderId");
+
+
+--
 -- Name: products products_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -264,4 +357,3 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
-
