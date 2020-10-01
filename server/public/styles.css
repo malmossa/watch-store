@@ -17,3 +17,7 @@
 .cart-div {
   cursor: pointer;
 }
+
+.shipping-address {
+  height: 90px;
+}
