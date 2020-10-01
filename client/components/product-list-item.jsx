@@ -6,6 +6,9 @@ function ProductListItem(props) {
   if (price.length === 4) {
     dollars = price.substr(0, 2);
     cents = price.substr(2);
+  } else if (price.length === 5) {
+    dollars = price.substr(0, 3);
+    cents = price.substr(3);
   } else {
     dollars = price.substr(0, 1);
     cents = price.substr(1, 2);
