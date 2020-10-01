@@ -4,22 +4,30 @@ import ProductDetails from './product-details';
 import ProductList from './product-list';
 import CartSummary from './cart-summary';
 import CheckoutForm from './checkout-form';
+import Carousel from './carousel';
+import Modal from './modal';
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       view: { name: 'catalog', params: {} },
-      cart: []
+      cart: [],
+      modalOpen: true
     };
     this.setView = this.setView.bind(this);
     this.getCartItems = this.getCartItems.bind(this);
     this.addToCart = this.addToCart.bind(this);
     this.placeOrder = this.placeOrder.bind(this);
+    this.modalToggle = this.modalToggle.bind(this);
   }
 
   componentDidMount() {
     this.getCartItems();
+  }
+
+  modalToggle() {
+    this.setState({ modalOpen: !this.state.modalOpen });
   }
 
   addToCart(product) {
@@ -69,10 +77,16 @@ export default class App extends React.Component {
 
   render() {
     const header = <Header setView={this.setView} cartItemCount={this.state.cart.length} />;
+    let modal = null;
+    if (this.state.modalOpen) {
+      modal = <Modal modalToggle={this.modalToggle} />;
+    }
     if (this.state.view.name === 'catalog') {
       return (
         <div>
           {header}
+          {modal}
+          <Carousel />
           <ProductList setView={this.setView} />
         </div>
       );

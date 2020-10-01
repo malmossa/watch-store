@@ -23,10 +23,10 @@ class ProductDetails extends React.Component {
           <a onClick={() => this.props.setView('catalog', {})} className="text-muted pl-4 mb-4 back-to-catalog">&lt; Back to catalog</a>
         </div>
         <div className="row">
-          <div className="col-4">
+          <div className="col-lg-4 col-sm-12">
             <img className="product-image" height="300px" width="300px" src={product.image} alt={product.name}></img>
           </div>
-          <div className="col-7">
+          <div className="col-lg-7 col-sm-12">
             <h2>{product.name}</h2>
             <p className="text-muted">${this.props.params.dollars}.{this.props.params.cents}</p>
             <p className="card-text">{product.shortDescription}</p>

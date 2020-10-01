@@ -17,7 +17,7 @@ class ProductList extends React.Component {
 
   render() {
     return (
-      <div className="container mt-5">
+      <div className="container">
         <div className="card-deck">
           {
             this.state.products.map(product => {
