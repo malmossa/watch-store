@@ -35,10 +35,25 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 1. Clone the repository : 
       ``` 
       git clone https://github.com/malmossa/watch-store.git 
-      ```
-      
- 2. Install npm dependencies : 
+      ```     
+2. Install npm dependencies : 
       ``` 
       npm install 
-      ```     
+      ```
+3. Start PostgreSQL : 
+      ``` 
+      sudo service postgresql start 
+      ```  
+4. Import the database to PostgreSQL : 
+      ``` 
+      npm run db:import
+      ```
+5. Start the server : 
+      ``` 
+      npm run dev
+      ```      
+      
+      
+      
+      
       
