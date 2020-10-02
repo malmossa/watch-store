@@ -3,7 +3,7 @@ import React from 'react';
 function Carousel() {
   return (
     <div className="container mb-3">
-      <div id="carouselExampleIndicators" className="carousel slide mt-3" data-ride="carousel">
+      <div id="carouselExampleControls" className="carousel slide mt-3" data-ride="carousel">
         <div className="carousel-inner">
           <div className="carousel-item active">
             <img src="images/watch-1.jpg" className="d-block w-100" alt="" />
