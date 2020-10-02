@@ -36,3 +36,9 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
       ``` 
       git clone https://github.com/malmossa/watch-store.git 
       ```
+      
+ 2. Install npm dependencies : 
+      ``` 
+      npm install 
+      ```     
+      
