@@ -22,4 +22,4 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 * User can place an order
 
 ## Preview
-![screen shot of the app](img/know_the_world_screen_shot.gif)
+![screen shot of the web site](server/public/images/watch-store.gif)
