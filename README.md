@@ -23,3 +23,15 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 
 ## Preview
 ![screen shot of the web site](server/public/images/watch-store.gif)
+
+## Development
+
+### System Requirements
+* Node.js 10 or higher
+* Npm 6 or higher
+* PostgreSQL
+
+### Getting Started
+1. Clone the repository : 
+`git clone https://github.com/kimballtyler/drum-shop.git
+cd drum-shop`
