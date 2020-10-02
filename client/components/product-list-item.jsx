@@ -3,19 +3,16 @@ import React from 'react';
 function ProductListItem(props) {
   const price = props.product.price.toString();
   let dollars, cents;
-  if (price.length === 4) {
-    dollars = price.substr(0, 2);
-    cents = price.substr(2);
-  } else if (price.length === 5) {
-    dollars = price.substr(0, 3);
-    cents = price.substr(3);
+  if (price.length > 3) {
+    dollars = price.slice(0, -2);
+    cents = price.substr(-2);
   } else {
     dollars = price.substr(0, 1);
     cents = price.substr(1, 2);
   }
 
   return (
-    <div className="col-4 d-flex align-items-stretch product">
+    <div className="col-lg-4 col-sm-12 col-md-6 d-flex align-items-stretch product">
       <div onClick={() => props.setView('details', { productId: props.product.productId, dollars: dollars, cents: cents })} className="card product-card">
         <img height="200" src={props.product.image} className="card-img-top product-image" alt={props.product.name} />
         <div className="card-body">

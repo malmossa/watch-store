@@ -7,9 +7,11 @@ function Header(props) {
       <div className="navbar-brand text-white ml-5" href="#">
         <img src="images/logo.png" width="200" height="50" className="d-inline-block align-top mr-1" />
       </div>
-      <div onClick={() => props.setView('cart', {})} className="text-white mr-5 cart-div">
-        <span className="mr-2">{`${props.cartItemCount} ${cartText}`}</span>
-        <i className="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
+      <div onClick={() => props.setView('cart', {})} className="text-white row mr-1">
+        <div className="cart-div">
+          <span className="mr-2">{`${props.cartItemCount} ${cartText}`}</span>
+          <i className="fa fa-shopping-cart fa-lg" aria-hidden="true"></i>
+        </div>
       </div>
     </nav>
   );
