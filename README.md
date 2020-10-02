@@ -33,5 +33,4 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 
 ### Getting Started
 1. Clone the repository : 
-```git clone https://github.com/kimballtyler/drum-shop.git
-cd drum-shop```
+``` git clone https://github.com/malmossa/watch-store.git ```
