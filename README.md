@@ -20,3 +20,6 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 * User can add a product to their cart
 * User can view their cart summary
 * User can place an order
+
+## Preview
+![screen shot of the app](img/know_the_world_screen_shot.gif)
