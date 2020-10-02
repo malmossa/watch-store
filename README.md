@@ -2,7 +2,7 @@
 A full stack e-commerce website with dummy data.
 
 ## Live Demo
-Try the website live at: [https://ws.mansoralmossa.com/](https://www.ws.mansoralmossa.com)
+Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmossa.com)
 
 ## Technologies Used
 * HTML5
