@@ -51,7 +51,8 @@ Try the website live at: [https://ws.mansoralmossa.com/](https://ws.mansoralmoss
 5. Start the server : 
       ``` 
       npm run dev
-      ```      
+      ``` 
+6. Visit http://localhost:3000 in your browser to view the application      
       
       
       
